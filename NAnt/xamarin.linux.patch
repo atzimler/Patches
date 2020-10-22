@@ -1,17 +1,20 @@
 diff -ruN nant-0.92.orig/Makefile nant-0.92/Makefile
---- nant-0.92.orig/Makefile	2012-06-10 00:05:52.000000000 +1000
-+++ nant-0.92/Makefile	2017-09-05 11:46:49.000000000 +1000
-@@ -1,6 +1,6 @@
+--- nant-0.92.orig/Makefile	2012-06-09 07:05:52.000000000 +1000
++++ nant-0.92/Makefile	2020-10-23 00:55:22.000000000 +1100
+@@ -1,8 +1,8 @@
  # NAnt make makefile for *nix
  MONO=mono
 -MCS=gmcs
 +MCS=mcs
  RESGEN=resgen
- TARGET=mono-2.0
+-TARGET=mono-2.0
++TARGET=mono-4.0
  
+ # Contains a list of acceptable targets used to build NAnt
+ VALID_TARGETS := mono-2.0 mono-3.5 mono-4.0 net-2.0 net-3.5 net-4.0
 diff -ruN nant-0.92.orig/NAnt.build nant-0.92/NAnt.build
---- nant-0.92.orig/NAnt.build	2012-06-10 00:14:37.000000000 +1000
-+++ nant-0.92/NAnt.build	2017-09-05 11:47:33.000000000 +1000
+--- nant-0.92.orig/NAnt.build	2012-06-09 07:14:36.000000000 +1000
++++ nant-0.92/NAnt.build	2020-10-23 00:55:14.000000000 +1100
 @@ -874,7 +874,8 @@
              the wrapper is created
          -->
@@ -23,8 +26,8 @@ diff -ruN nant-0.92.orig/NAnt.build nant-0.92/NAnt.build
      </target>
  </project>
 diff -ruN nant-0.92.orig/src/NAnt.Console/App.config nant-0.92/src/NAnt.Console/App.config
---- nant-0.92.orig/src/NAnt.Console/App.config	2012-06-10 00:05:53.000000000 +1000
-+++ nant-0.92/src/NAnt.Console/App.config	2017-09-05 11:47:20.000000000 +1000
+--- nant-0.92.orig/src/NAnt.Console/App.config	2012-06-09 07:05:52.000000000 +1000
++++ nant-0.92/src/NAnt.Console/App.config	2020-10-23 00:55:14.000000000 +1100
 @@ -1820,7 +1820,7 @@
                              <attribute name="managed">true</attribute>
                          </task>
@@ -156,8 +159,8 @@ diff -ruN nant-0.92.orig/src/NAnt.Console/App.config nant-0.92/src/NAnt.Console/
                          <!-- unmanaged tools -->
                          <directory name="${prefix}/bin" />
 diff -ruN nant-0.92.orig/src/NAnt.Console/NAnt.Console.build nant-0.92/src/NAnt.Console/NAnt.Console.build
---- nant-0.92.orig/src/NAnt.Console/NAnt.Console.build	2012-06-10 00:05:53.000000000 +1000
-+++ nant-0.92/src/NAnt.Console/NAnt.Console.build	2017-09-05 11:47:26.000000000 +1000
+--- nant-0.92.orig/src/NAnt.Console/NAnt.Console.build	2012-06-09 07:05:52.000000000 +1000
++++ nant-0.92/src/NAnt.Console/NAnt.Console.build	2020-10-23 00:55:14.000000000 +1100
 @@ -34,7 +34,6 @@
              <references>
                  <include name="${build.dir}/bin/log4net.dll" />
