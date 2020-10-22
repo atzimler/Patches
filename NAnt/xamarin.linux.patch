@@ -1,0 +1,168 @@
+diff -ruN nant-0.92.orig/Makefile nant-0.92/Makefile
+--- nant-0.92.orig/Makefile	2012-06-10 00:05:52.000000000 +1000
++++ nant-0.92/Makefile	2017-09-05 11:46:49.000000000 +1000
+@@ -1,6 +1,6 @@
+ # NAnt make makefile for *nix
+ MONO=mono
+-MCS=gmcs
++MCS=mcs
+ RESGEN=resgen
+ TARGET=mono-2.0
+ 
+diff -ruN nant-0.92.orig/NAnt.build nant-0.92/NAnt.build
+--- nant-0.92.orig/NAnt.build	2012-06-10 00:14:37.000000000 +1000
++++ nant-0.92/NAnt.build	2017-09-05 11:47:33.000000000 +1000
+@@ -874,7 +874,8 @@
+             the wrapper is created
+         -->
+         <echo file="${wrapper}" append="false">#!/bin/sh${environment::newline()}</echo>
+-        <echo file="${wrapper}" append="true">exec ${path::combine(install.prefix, 'bin')}/mono ${path::combine(install.nant, 'bin')}/NAnt.exe "$@"</echo>
++        <echo file="${wrapper}" append="true">export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH${environment::newline()}</echo>
++        <echo file="${wrapper}" append="true">exec mono ${path::combine(install.nant, 'bin')}/NAnt.exe "$@"</echo>
+         <exec program="chmod" commandline="a+x ${path::combine(install.bindir, 'nant')}" />
+     </target>
+ </project>
+diff -ruN nant-0.92.orig/src/NAnt.Console/App.config nant-0.92/src/NAnt.Console/App.config
+--- nant-0.92.orig/src/NAnt.Console/App.config	2012-06-10 00:05:53.000000000 +1000
++++ nant-0.92/src/NAnt.Console/App.config	2017-09-05 11:47:20.000000000 +1000
+@@ -1820,7 +1820,7 @@
+                             <attribute name="managed">true</attribute>
+                         </task>
+                         <task name="csc">
+-                            <attribute name="exename">gmcs</attribute>
++                            <attribute name="exename">mcs</attribute>
+                             <attribute name="managed">true</attribute>
+                             <attribute name="supportspackagereferences">true</attribute>
+                             <attribute name="supportsnowarnlist">true</attribute>
+@@ -1972,7 +1972,7 @@
+                             <attribute name="managed">true</attribute>
+                         </task>
+                         <task name="csc">
+-                            <attribute name="exename">gmcs</attribute>
++                            <attribute name="exename">mcs</attribute>
+                             <attribute name="managed">true</attribute>
+                             <attribute name="langversion">linq</attribute>
+                             <attribute name="supportspackagereferences">true</attribute>
+@@ -2464,9 +2464,9 @@
+                     family="mono"
+                     version="2.0"
+                     description="Mono 2.0 Profile"
+-                    sdkdirectory="${toolDirectory}"
+-                    frameworkdirectory="${toolDirectory}"
+-                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0')}"
++                    sdkdirectory="/usr/lib/mono/4.5"
++                    frameworkdirectory="/usr/lib/mono/4.5"
++                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.5-api')}"
+                     clrversion="2.0.50727"
+                     clrtype="Desktop"
+                     vendor="Mono"
+@@ -2489,7 +2489,7 @@
+                             </strict>
+                         </modes>
+                     </runtime>
+-                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
++                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/4.5-api')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+                     <task-assemblies>
+@@ -2518,7 +2518,7 @@
+                             <property name="csc.supportsdocgeneration" value="false" />
+                         </if>
+                         <if test="${pkg-config::is-atleast-version('mono', '1.1')}">
+-                            <property name="toolDirectory" value="${path::combine(prefix, 'lib/mono/2.0')}" />
++                            <property name="toolDirectory" value="${path::combine(prefix, 'lib/mono/4.5-api')}" />
+                             <property name="resgen.tool" value="resgen" />
+                             <property name="csc.supportsdocgeneration" value="true" />
+                         </if>
+@@ -2532,7 +2532,7 @@
+                             <attribute name="managed">true</attribute>
+                         </task>
+                         <task name="csc">
+-                            <attribute name="exename">gmcs</attribute>
++                            <attribute name="exename">mcs</attribute>
+                             <attribute name="managed">true</attribute>
+                             <attribute name="supportspackagereferences">true</attribute>
+                             <attribute name="supportsnowarnlist">true</attribute>
+@@ -2574,7 +2574,7 @@
+                     description="Mono 3.5 Profile"
+                     sdkdirectory="${toolDirectory}"
+                     frameworkdirectory="${toolDirectory}"
+-                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0')}"
++                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0-api')}"
+                     clrversion="2.0.50727"
+                     clrtype="Desktop"
+                     vendor="Mono"
+@@ -2603,7 +2603,7 @@
+                     <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/3.0')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+-                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
++                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/4.5-api')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+                     <task-assemblies>
+@@ -2616,7 +2616,7 @@
+                     </task-assemblies>
+                     <tool-paths>
+                         <directory name="${toolDirectory}" />
+-                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
++                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
+                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
+                         <!-- unmanaged tools -->
+                         <directory name="${prefix}/bin" />
+@@ -2634,7 +2634,7 @@
+                             <attribute name="managed">true</attribute>
+                         </task>
+                         <task name="csc">
+-                            <attribute name="exename">gmcs</attribute>
++                            <attribute name="exename">mcs</attribute>
+                             <attribute name="managed">true</attribute>
+                             <attribute name="langversion">linq</attribute>
+                             <attribute name="supportspackagereferences">true</attribute>
+@@ -2676,7 +2676,7 @@
+                     description="Mono 4.0 Profile"
+                     sdkdirectory="${toolDirectory}"
+                     frameworkdirectory="${toolDirectory}"
+-                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.0')}"
++                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.0-api')}"
+                     clrversion="4.0.30319"
+                     clrtype="Desktop"
+                     vendor="Mono"
+@@ -2708,7 +2708,7 @@
+                     <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/3.0')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+-                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
++                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0-api')}">
+                         <include name="*.dll" />
+                     </reference-assemblies>
+                     <task-assemblies>
+@@ -2722,7 +2722,7 @@
+                     <tool-paths>
+                         <directory name="${toolDirectory}" />
+                         <directory name="${path::combine(prefix, 'lib/mono/3.5')}" />
+-                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
++                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
+                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
+                         <!-- unmanaged tools -->
+                         <directory name="${prefix}/bin" />
+@@ -2824,7 +2824,7 @@
+                     </task-assemblies>
+                     <tool-paths>
+                         <directory name="${toolDirectory}" />
+-                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
++                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
+                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
+                         <!-- unmanaged tools -->
+                         <directory name="${prefix}/bin" />
+diff -ruN nant-0.92.orig/src/NAnt.Console/NAnt.Console.build nant-0.92/src/NAnt.Console/NAnt.Console.build
+--- nant-0.92.orig/src/NAnt.Console/NAnt.Console.build	2012-06-10 00:05:53.000000000 +1000
++++ nant-0.92/src/NAnt.Console/NAnt.Console.build	2017-09-05 11:47:26.000000000 +1000
+@@ -34,7 +34,6 @@
+             <references>
+                 <include name="${build.dir}/bin/log4net.dll" />
+                 <include name="System.Configuration.dll" />
+-                <include name="System.Xml.dll" />
+             </references>
+             <resources>
+                 <include name="*.resx"/>
