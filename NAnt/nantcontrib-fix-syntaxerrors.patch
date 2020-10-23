@@ -1,3 +1,15 @@
+diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs
+--- nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs	2020-10-23 15:06:10.000000000 +1100
+@@ -27,6 +27,8 @@
+ using NAnt.Core;
+ using NAnt.Core.Attributes;
+ 
++using EnumerationOptions = System.Management.EnumerationOptions;
++
+ namespace NAnt.Contrib.Tasks.BizTalk {
+     /// <summary>
+     /// Allows stopping, starting and resetting of BizTalk in-process host 
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs	2012-06-09 07:06:30.000000000 +1000
 +++ nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs	2020-10-23 14:55:54.000000000 +1100
