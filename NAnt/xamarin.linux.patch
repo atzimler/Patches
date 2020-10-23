@@ -1,171 +1,90 @@
-diff -ruN nant-0.92.orig/Makefile nant-0.92/Makefile
---- nant-0.92.orig/Makefile	2012-06-09 07:05:52.000000000 +1000
-+++ nant-0.92/Makefile	2020-10-23 00:55:22.000000000 +1100
-@@ -1,8 +1,8 @@
- # NAnt make makefile for *nix
- MONO=mono
--MCS=gmcs
-+MCS=mcs
- RESGEN=resgen
--TARGET=mono-2.0
-+TARGET=mono-4.0
+diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs
+--- nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs	2020-10-23 14:55:54.000000000 +1100
+@@ -30,6 +30,8 @@
  
- # Contains a list of acceptable targets used to build NAnt
- VALID_TARGETS := mono-2.0 mono-3.5 mono-4.0 net-2.0 net-3.5 net-4.0
-diff -ruN nant-0.92.orig/NAnt.build nant-0.92/NAnt.build
---- nant-0.92.orig/NAnt.build	2012-06-09 07:14:36.000000000 +1000
-+++ nant-0.92/NAnt.build	2020-10-23 00:55:14.000000000 +1100
-@@ -874,7 +874,8 @@
-             the wrapper is created
-         -->
-         <echo file="${wrapper}" append="false">#!/bin/sh${environment::newline()}</echo>
--        <echo file="${wrapper}" append="true">exec ${path::combine(install.prefix, 'bin')}/mono ${path::combine(install.nant, 'bin')}/NAnt.exe "$@"</echo>
-+        <echo file="${wrapper}" append="true">export PATH=/Library/Frameworks/Mono.framework/Versions/Current/bin:$PATH${environment::newline()}</echo>
-+        <echo file="${wrapper}" append="true">exec mono ${path::combine(install.nant, 'bin')}/NAnt.exe "$@"</echo>
-         <exec program="chmod" commandline="a+x ${path::combine(install.bindir, 'nant')}" />
-     </target>
- </project>
-diff -ruN nant-0.92.orig/src/NAnt.Console/App.config nant-0.92/src/NAnt.Console/App.config
---- nant-0.92.orig/src/NAnt.Console/App.config	2012-06-09 07:05:52.000000000 +1000
-+++ nant-0.92/src/NAnt.Console/App.config	2020-10-23 00:55:14.000000000 +1100
-@@ -1820,7 +1820,7 @@
-                             <attribute name="managed">true</attribute>
-                         </task>
-                         <task name="csc">
--                            <attribute name="exename">gmcs</attribute>
-+                            <attribute name="exename">mcs</attribute>
-                             <attribute name="managed">true</attribute>
-                             <attribute name="supportspackagereferences">true</attribute>
-                             <attribute name="supportsnowarnlist">true</attribute>
-@@ -1972,7 +1972,7 @@
-                             <attribute name="managed">true</attribute>
-                         </task>
-                         <task name="csc">
--                            <attribute name="exename">gmcs</attribute>
-+                            <attribute name="exename">mcs</attribute>
-                             <attribute name="managed">true</attribute>
-                             <attribute name="langversion">linq</attribute>
-                             <attribute name="supportspackagereferences">true</attribute>
-@@ -2464,9 +2464,9 @@
-                     family="mono"
-                     version="2.0"
-                     description="Mono 2.0 Profile"
--                    sdkdirectory="${toolDirectory}"
--                    frameworkdirectory="${toolDirectory}"
--                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0')}"
-+                    sdkdirectory="/usr/lib/mono/4.5"
-+                    frameworkdirectory="/usr/lib/mono/4.5"
-+                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.5-api')}"
-                     clrversion="2.0.50727"
-                     clrtype="Desktop"
-                     vendor="Mono"
-@@ -2489,7 +2489,7 @@
-                             </strict>
-                         </modes>
-                     </runtime>
--                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
-+                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/4.5-api')}">
-                         <include name="*.dll" />
-                     </reference-assemblies>
-                     <task-assemblies>
-@@ -2518,7 +2518,7 @@
-                             <property name="csc.supportsdocgeneration" value="false" />
-                         </if>
-                         <if test="${pkg-config::is-atleast-version('mono', '1.1')}">
--                            <property name="toolDirectory" value="${path::combine(prefix, 'lib/mono/2.0')}" />
-+                            <property name="toolDirectory" value="${path::combine(prefix, 'lib/mono/4.5-api')}" />
-                             <property name="resgen.tool" value="resgen" />
-                             <property name="csc.supportsdocgeneration" value="true" />
-                         </if>
-@@ -2532,7 +2532,7 @@
-                             <attribute name="managed">true</attribute>
-                         </task>
-                         <task name="csc">
--                            <attribute name="exename">gmcs</attribute>
-+                            <attribute name="exename">mcs</attribute>
-                             <attribute name="managed">true</attribute>
-                             <attribute name="supportspackagereferences">true</attribute>
-                             <attribute name="supportsnowarnlist">true</attribute>
-@@ -2574,7 +2574,7 @@
-                     description="Mono 3.5 Profile"
-                     sdkdirectory="${toolDirectory}"
-                     frameworkdirectory="${toolDirectory}"
--                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0')}"
-+                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/2.0-api')}"
-                     clrversion="2.0.50727"
-                     clrtype="Desktop"
-                     vendor="Mono"
-@@ -2603,7 +2603,7 @@
-                     <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/3.0')}">
-                         <include name="*.dll" />
-                     </reference-assemblies>
--                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
-+                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/4.5-api')}">
-                         <include name="*.dll" />
-                     </reference-assemblies>
-                     <task-assemblies>
-@@ -2616,7 +2616,7 @@
-                     </task-assemblies>
-                     <tool-paths>
-                         <directory name="${toolDirectory}" />
--                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
-+                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
-                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
-                         <!-- unmanaged tools -->
-                         <directory name="${prefix}/bin" />
-@@ -2634,7 +2634,7 @@
-                             <attribute name="managed">true</attribute>
-                         </task>
-                         <task name="csc">
--                            <attribute name="exename">gmcs</attribute>
-+                            <attribute name="exename">mcs</attribute>
-                             <attribute name="managed">true</attribute>
-                             <attribute name="langversion">linq</attribute>
-                             <attribute name="supportspackagereferences">true</attribute>
-@@ -2676,7 +2676,7 @@
-                     description="Mono 4.0 Profile"
-                     sdkdirectory="${toolDirectory}"
-                     frameworkdirectory="${toolDirectory}"
--                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.0')}"
-+                    frameworkassemblydirectory="${path::combine(prefix, 'lib/mono/4.0-api')}"
-                     clrversion="4.0.30319"
-                     clrtype="Desktop"
-                     vendor="Mono"
-@@ -2708,7 +2708,7 @@
-                     <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/3.0')}">
-                         <include name="*.dll" />
-                     </reference-assemblies>
--                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0')}">
-+                    <reference-assemblies basedir="${path::combine(prefix, 'lib/mono/2.0-api')}">
-                         <include name="*.dll" />
-                     </reference-assemblies>
-                     <task-assemblies>
-@@ -2722,7 +2722,7 @@
-                     <tool-paths>
-                         <directory name="${toolDirectory}" />
-                         <directory name="${path::combine(prefix, 'lib/mono/3.5')}" />
--                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
-+                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
-                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
-                         <!-- unmanaged tools -->
-                         <directory name="${prefix}/bin" />
-@@ -2824,7 +2824,7 @@
-                     </task-assemblies>
-                     <tool-paths>
-                         <directory name="${toolDirectory}" />
--                        <directory name="${path::combine(prefix, 'lib/mono/2.0')}" />
-+                        <directory name="${path::combine(prefix, 'lib/mono/2.0-api')}" />
-                         <directory name="${path::combine(prefix, 'lib/mono/1.0')}" />
-                         <!-- unmanaged tools -->
-                         <directory name="${prefix}/bin" />
-diff -ruN nant-0.92.orig/src/NAnt.Console/NAnt.Console.build nant-0.92/src/NAnt.Console/NAnt.Console.build
---- nant-0.92.orig/src/NAnt.Console/NAnt.Console.build	2012-06-09 07:05:52.000000000 +1000
-+++ nant-0.92/src/NAnt.Console/NAnt.Console.build	2020-10-23 00:55:14.000000000 +1100
-@@ -34,7 +34,6 @@
-             <references>
-                 <include name="${build.dir}/bin/log4net.dll" />
-                 <include name="System.Configuration.dll" />
--                <include name="System.Xml.dll" />
-             </references>
-             <resources>
-                 <include name="*.resx"/>
+ using NAnt.Contrib.Types.BizTalk;
+ 
++using EnumerationOptions = System.Management.EnumerationOptions;
++
+ namespace NAnt.Contrib.Tasks.BizTalk {
+     /// <summary>
+     /// Removes all bindings for a given assembly from a BizTalk configuration
+diff -ruN nantcontrib-0.92.orig/src/Tasks/Msi/InstallerDatabase.cs nantcontrib-0.92/src/Tasks/Msi/InstallerDatabase.cs
+--- nantcontrib-0.92.orig/src/Tasks/Msi/InstallerDatabase.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/Msi/InstallerDatabase.cs	2020-10-23 14:54:01.000000000 +1100
+@@ -148,7 +148,7 @@
+         }
+ 
+         public SummaryInfo GetSummaryInformation() {
+-            return _database.get_SummaryInformation(200);
++            return _database.SummaryInformation;
+         }
+ 
+ 
+diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/BaseTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/BaseTask.cs
+--- nantcontrib-0.92.orig/src/Tasks/SourceSafe/BaseTask.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/SourceSafe/BaseTask.cs	2020-10-23 14:54:01.000000000 +1100
+@@ -160,7 +160,7 @@
+                 // and version
+                 _item = _database.get_VSSItem(Path, false);
+                 if (Version != null) {
+-                    _item = _item.get_Version(Version);
++                    _item = _item.Version;
+                 }
+             } catch (Exception ex) {
+                 throw new BuildException("The \"path\" and/or \"version\" is not valid.", 
+diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/DiffTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/DiffTask.cs
+--- nantcontrib-0.92.orig/src/Tasks/SourceSafe/DiffTask.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/SourceSafe/DiffTask.cs	2020-10-23 14:54:01.000000000 +1100
+@@ -108,7 +108,7 @@
+                 Log(Level.Info, LogPrefix + "Processing item " + ssItem.Name );
+             }
+             bool addVersion = true;
+-            foreach (IVSSVersion version in ssItem.get_Versions(0)) {
++            foreach (IVSSVersion version in ssItem.Versions) {
+                 // VSS returns the versions in descending order, meaning the
+                 // most recent versions appear first.
+                 string action = version.Action;
+@@ -169,7 +169,7 @@
+                 Log(Level.Info, LogPrefix + "Processing project " + Project);
+             }
+             IVSSItem ssProj = this.Database.get_VSSItem(Project,false);
+-            IVSSItems ssSubItems = ssProj.get_Items(false);
++            IVSSItems ssSubItems = ssProj.Items;
+             foreach (IVSSItem subItem in ssSubItems) {
+                 if (subItem.Type == 0) {
+                     //Type=0 is a Project
+diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/GetTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/GetTask.cs
+--- nantcontrib-0.92.orig/src/Tasks/SourceSafe/GetTask.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/SourceSafe/GetTask.cs	2020-10-23 14:54:01.000000000 +1100
+@@ -244,7 +244,7 @@
+         /// <param name="item">The VSS Item (project) to check for deletions</param>
+         /// <param name="localPathPrefix">The path to the folder of the item being processed</param>
+         public void RemoveDeletedFromLocalImage(IVSSItem item, string localPathPrefix) {
+-            IVSSItems items = item.get_Items(true);
++            IVSSItems items = item.Items;
+ 
+             Hashtable deletedTable = BuildDeletedTable(items);
+         
+diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/History.cs nantcontrib-0.92/src/Tasks/SourceSafe/History.cs
+--- nantcontrib-0.92.orig/src/Tasks/SourceSafe/History.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/SourceSafe/History.cs	2020-10-23 14:54:01.000000000 +1100
+@@ -275,7 +275,7 @@
+             string user = User != null ? User.ToLower(CultureInfo.InvariantCulture)
+                 : null;
+ 
+-            foreach (IVSSVersion version in ssItem.get_Versions(VersionFlags)) {
++            foreach (IVSSVersion version in ssItem.Versions) {
+                 // VSS returns the versions in descending order, meaning the
+                 // most recent versions appear first.
+                 if (ToDate == DateTime.MinValue || version.Date <= ToDate) {
+@@ -303,7 +303,7 @@
+             string user = User != null ? User.ToLower(CultureInfo.InvariantCulture)
+                 : null;
+ 
+-            foreach (IVSSVersion version in ssItem.get_Versions(VersionFlags)) {
++            foreach (IVSSVersion version in ssItem.Versions) {
+                 // VSS returns the versions in descending order, meaning the
+                 // most recent versions appear first.
+                 if (ToLabel == null || version.Action.StartsWith(string.Format("Labeled '{0}'", ToLabel))){
