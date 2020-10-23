@@ -10,6 +10,18 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Host.cs nantcontrib-0.92/src/T
  namespace NAnt.Contrib.Tasks.BizTalk {
      /// <summary>
      /// Allows BizTalk (in-process) host instances to be controlled.
+diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/ReceiveLocation.cs nantcontrib-0.92/src/Tasks/BizTalk/ReceiveLocation.cs
+--- nantcontrib-0.92.orig/src/Tasks/BizTalk/ReceiveLocation.cs	2012-06-09 07:06:30.000000000 +1000
++++ nantcontrib-0.92/src/Tasks/BizTalk/ReceiveLocation.cs	2020-10-23 15:21:03.000000000 +1100
+@@ -27,6 +27,8 @@
+ using NAnt.Core.Attributes;
+ using NAnt.Core.Util;
+ 
++using EnumerationOptions = System.Management.EnumerationOptions;
++
+ namespace NAnt.Contrib.Tasks.BizTalk {
+     /// <summary>
+     /// Allows BizTalk receive locations to be controlled.
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs	2012-06-09 07:06:30.000000000 +1000
 +++ nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs	2020-10-23 15:06:10.000000000 +1100
