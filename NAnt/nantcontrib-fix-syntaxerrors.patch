@@ -1,6 +1,26 @@
+diff -ruN nantcontrib-0.92.orig/NAntContrib.build nantcontrib-0.92/NAntContrib.build
+--- nantcontrib-0.92.orig/NAntContrib.build	2012-06-09 08:07:22.000000000 +1000
++++ nantcontrib-0.92/NAntContrib.build	2020-11-01 18:55:32.000000000 +1100
+@@ -141,6 +141,7 @@
+                 <include name="Tasks/XsdTask.cs" />
+             </sources>
+             <references>
++        	<include name="System.dll" />
+                 <include name="System.Data.dll" />
+                 <include name="${nant.dir}/bin/NAnt.Core.dll" />
+                 <include name="${nant.dir}/bin/NAnt.DotNetTasks.dll" />
+@@ -202,6 +203,8 @@
+                 <exclude name="${src.dir}/Tasks/SharePoint/*.cs" />
+             </sources>
+             <references>
++                <include name="System.dll" />
++                <include name="System.Xml.dll" />
+                 <include name="${nant.dir}/bin/NAnt.Core.dll" />
+                 <include name="${nant.dir}/bin/NAnt.DotNetTasks.dll" />
+                 <include name="${nant.dir}/bin/NAnt.SourceControlTasks.dll" />
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Host.cs nantcontrib-0.92/src/Tasks/BizTalk/Host.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/Host.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/BizTalk/Host.cs	2020-10-23 15:11:38.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/BizTalk/Host.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -27,6 +27,8 @@
  using NAnt.Core.Attributes;
  using NAnt.Core.Util;
@@ -12,7 +32,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Host.cs nantcontrib-0.92/src/T
      /// Allows BizTalk (in-process) host instances to be controlled.
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/ReceiveLocation.cs nantcontrib-0.92/src/Tasks/BizTalk/ReceiveLocation.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/ReceiveLocation.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/BizTalk/ReceiveLocation.cs	2020-10-23 15:21:03.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/BizTalk/ReceiveLocation.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -27,6 +27,8 @@
  using NAnt.Core.Attributes;
  using NAnt.Core.Util;
@@ -24,7 +44,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/ReceiveLocation.cs nantcontrib
      /// Allows BizTalk receive locations to be controlled.
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs	2020-10-23 15:06:10.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/BizTalk/Reset.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -27,6 +27,8 @@
  using NAnt.Core;
  using NAnt.Core.Attributes;
@@ -36,7 +56,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Reset.cs nantcontrib-0.92/src/
      /// Allows stopping, starting and resetting of BizTalk in-process host 
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/SendPort.cs nantcontrib-0.92/src/Tasks/BizTalk/SendPort.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/SendPort.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/BizTalk/SendPort.cs	2020-10-23 15:15:59.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/BizTalk/SendPort.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -27,6 +27,8 @@
  using NAnt.Core.Attributes;
  using NAnt.Core.Util;
@@ -48,7 +68,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/SendPort.cs nantcontrib-0.92/s
      /// Allows BizTalk send ports to be controlled.
 diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs
 --- nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs	2020-10-23 14:55:54.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/BizTalk/Unbind.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -30,6 +30,8 @@
  
  using NAnt.Contrib.Types.BizTalk;
@@ -60,7 +80,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/BizTalk/Unbind.cs nantcontrib-0.92/src
      /// Removes all bindings for a given assembly from a BizTalk configuration
 diff -ruN nantcontrib-0.92.orig/src/Tasks/Msi/InstallerDatabase.cs nantcontrib-0.92/src/Tasks/Msi/InstallerDatabase.cs
 --- nantcontrib-0.92.orig/src/Tasks/Msi/InstallerDatabase.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/Msi/InstallerDatabase.cs	2020-10-23 14:54:01.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/Msi/InstallerDatabase.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -148,7 +148,7 @@
          }
  
@@ -72,7 +92,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/Msi/InstallerDatabase.cs nantcontrib-0
  
 diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/BaseTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/BaseTask.cs
 --- nantcontrib-0.92.orig/src/Tasks/SourceSafe/BaseTask.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/SourceSafe/BaseTask.cs	2020-10-23 14:54:01.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/SourceSafe/BaseTask.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -160,7 +160,7 @@
                  // and version
                  _item = _database.get_VSSItem(Path, false);
@@ -84,7 +104,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/BaseTask.cs nantcontrib-0.9
                  throw new BuildException("The \"path\" and/or \"version\" is not valid.", 
 diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/DiffTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/DiffTask.cs
 --- nantcontrib-0.92.orig/src/Tasks/SourceSafe/DiffTask.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/SourceSafe/DiffTask.cs	2020-10-23 14:54:01.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/SourceSafe/DiffTask.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -108,7 +108,7 @@
                  Log(Level.Info, LogPrefix + "Processing item " + ssItem.Name );
              }
@@ -105,7 +125,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/DiffTask.cs nantcontrib-0.9
                      //Type=0 is a Project
 diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/GetTask.cs nantcontrib-0.92/src/Tasks/SourceSafe/GetTask.cs
 --- nantcontrib-0.92.orig/src/Tasks/SourceSafe/GetTask.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/SourceSafe/GetTask.cs	2020-10-23 14:54:01.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/SourceSafe/GetTask.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -244,7 +244,7 @@
          /// <param name="item">The VSS Item (project) to check for deletions</param>
          /// <param name="localPathPrefix">The path to the folder of the item being processed</param>
@@ -117,7 +137,7 @@ diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/GetTask.cs nantcontrib-0.92
          
 diff -ruN nantcontrib-0.92.orig/src/Tasks/SourceSafe/History.cs nantcontrib-0.92/src/Tasks/SourceSafe/History.cs
 --- nantcontrib-0.92.orig/src/Tasks/SourceSafe/History.cs	2012-06-09 07:06:30.000000000 +1000
-+++ nantcontrib-0.92/src/Tasks/SourceSafe/History.cs	2020-10-23 14:54:01.000000000 +1100
++++ nantcontrib-0.92/src/Tasks/SourceSafe/History.cs	2020-11-01 18:43:12.000000000 +1100
 @@ -275,7 +275,7 @@
              string user = User != null ? User.ToLower(CultureInfo.InvariantCulture)
                  : null;
